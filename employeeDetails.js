@@ -10,7 +10,7 @@ class EmployeeList extends HTMLElement {
         let headerComponent = document.createElement("div");
         headerComponent.style.margin = "20px";
         headerComponent.innerHTML = `
-          <div style="padding: 10px; border-bottom: 1px solid red;">
+          <div style="padding: 10px; border-bottom: 1px solid red; border-right: 1px solid red;">
             <div style="display: inline-block; width: 200px">
               <img src="${element.avatar}" />
             </div>
@@ -20,7 +20,6 @@ class EmployeeList extends HTMLElement {
             </div>
           </div>`;
         this.appendChild(headerComponent)
-
         document.getElementById(`employee_${element.id}`).addEventListener("click", this.getEmployeeDetails.bind(this))
       });
     })
@@ -44,9 +43,14 @@ class OtherElement extends HTMLElement {
   selectedEmployee = null;
   render() {
     if(this.selectedEmployee) {
-      this.innerHTML = `<h2>Employee Selected...${this.selectedEmployee.name}</h2>`;
+      this.innerHTML = `<div style="">
+        <h2>Employee Selected...</h2>
+        <b>Employee Name: ${this.selectedEmployee.name}</b><br/><br/>
+        <b>Employee Create On: ${this.selectedEmployee.createdAt}</b><br/><br/>
+        <b>Employee Id: ${this.selectedEmployee.id}</b>
+      </div>`;
     } else {
-      this.innerHTML = `<h2>No Employee Selected</h2>`;
+      this.innerHTML = `<h2></h2>`;
     }
   }
   connectedCallback() {
