@@ -27,13 +27,41 @@ class EmployeeList extends HTMLElement {
   }
 
   getEmployeeDetails(event) {
-    var selectedEmployee = this.employeeList.filter(employee => employee.id == event.target.id.split("employee_")[1])[1]
+    var selectedEmployee = this.employeeList.filter(employee => {
+      return employee.id == event.target.id.split("employee_")[1]
+    })
     var customEvent = new CustomEvent("getDetails", {
       bubbles: true,
-      selectedEmployee: selectedEmployee
+      detail: {
+        selectedEmployee: selectedEmployee[0]
+      }
     })
     this.dispatchEvent(customEvent)
   }
+}
+
+class OtherElement extends HTMLElement {
+  selectedEmployee = null;
+  render() {
+    if(this.selectedEmployee) {
+      this.innerHTML = `<h2>Employee Selected...${this.selectedEmployee.name}</h2>`;
+    } else {
+      this.innerHTML = `<h2>No Employee Selected</h2>`;
+    }
+  }
+  connectedCallback() {
+    this.render();
+    window.addEventListener("getDetails", (event) => {
+      this.selectedEmployee = event.detail.selectedEmployee;
+      this.render();
+    })
+  }
+}
+
+window.customElements.define('other-element', OtherElement);
+
+function updateAttributes() {
+  document.querySelector("blue-buy").setAttribute("name", "Anshul");
 }
 
 window.customElements.define('employee-list', EmployeeList);
